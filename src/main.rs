@@ -6,6 +6,19 @@ use std::{
 
 const CACHE_FILE_NAME: &str = "PRIMES_CACHE_FILE";
 
+fn integer_sqrt(n: usize) -> usize {
+    if n < 2 {
+        return n;
+    }
+    let mut x = n;
+    let mut y = (x + 1) / 2;
+    while y < x {
+        x = y;
+        y = (x + n / x) / 2;
+    }
+    x
+}
+
 fn read_cache() -> Vec<usize> {
     match File::open(CACHE_FILE_NAME) {
         Ok(file) => {
@@ -107,18 +120,9 @@ fn main() {
     }
 
     let start = offset.max(2);
-
     let cache_max = cache.last().copied().unwrap_or(0);
 
-    let sqrt_limit = if limit == 0 {
-        0
-    } else {
-        let mut s = 1;
-        while s <= limit / s {
-            s += 1;
-        }
-        s - 1
-    };
+    let sqrt_limit = integer_sqrt(limit);
 
     if cache_max < sqrt_limit {
         extend_cache(&mut cache, (cache_max + 1).max(2), sqrt_limit);
