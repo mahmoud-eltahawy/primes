@@ -169,9 +169,11 @@ fn find_primes(candidates: &[u64], cache: &[u64]) -> Vec<u64> {
         if is_prime_cached(x, cache) {
             found.push(x);
         }
+        let stdout = io::stdout();
+        let mut printer = BufWriter::new(stdout.lock());
         if (i + 1) % 10_000 == 0 {
-            eprint!("\rTesting candidate {} / {}", i + 1, total);
-            io::stderr().flush().unwrap();
+            write!(&mut printer, "\rTesting candidate {} / {}", i + 1, total).unwrap();
+            printer.flush().unwrap();
         }
     }
     eprintln!("\rTesting complete: {} candidates checked", total);
