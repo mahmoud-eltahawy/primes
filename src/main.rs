@@ -11,7 +11,7 @@ fn integer_sqrt(n: usize) -> usize {
         return n;
     }
     let mut x = n;
-    let mut y = (x + 1) / 2;
+    let mut y = x.div_ceil(2);
     while y < x {
         x = y;
         y = (x + n / x) / 2;
@@ -77,6 +77,7 @@ fn sieve_segment(start: usize, end: usize, cache: &[usize]) -> Vec<usize> {
         if p > end / p {
             break;
         }
+
         let first_multiple = start.div_ceil(p) * p;
         let first = first_multiple.max(p * p);
 
@@ -98,7 +99,6 @@ fn extend_cache(cache: &mut Vec<usize>, start: usize, end: usize) {
 }
 
 fn main() {
-    let mut cache = read_cache();
     let mut args = args();
     args.next();
 
@@ -114,6 +114,8 @@ fn main() {
         Some(second) => (first, second),
         None => (0, first),
     };
+
+    let mut cache = read_cache();
 
     if limit < 2 || offset > limit {
         return;
